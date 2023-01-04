@@ -1,6 +1,9 @@
+#include "Field.cpp"
+
 #include <iostream>
 
 int main() {
-    std::cout << "Hello World";
+    Field field;
+    field.printField();
     return 0;
 }
