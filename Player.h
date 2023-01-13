@@ -1,21 +1,53 @@
 #ifndef PLAYER
 #define PLAYER
 
-#include <Field.cpp>
+#include "Field.cpp"
 
 class Player {
     public:
-    Player();
-    void placeShips();
-    void doTurn();
-    void printPlayer();
+    Player() {};
+    ~Player() {};
+    virtual bool doTurn() = 0;
+    virtual void placeShips() = 0;
+    Field getField() { return field;};
 
     private:
+    void placeSingleShip(int, int, int, int, int);
     Field field;
-    void placeSingleShip(int);
-    bool checkPlacePos(char, int, char, int, int);
-    bool checkShootPos(char, int);
-    int* posToCoords(char, int);
+};
+
+class PlayerLocal : public Player {
+    public:
+    PlayerLocal() : Player() {};
+    void placeShips() override {
+        // TODO
+        std::cout << "local player placed ships" << std::endl;
+    }
+    bool doTurn() override {
+        // TODO
+        std::cout << "local player done turn" << std::endl;
+        return false;
+    }
+    void placeSingleShip(int firstPosX, int firstPosY, int secondPosX, int secondPosY, int shipLength) {
+        // TODO
+    }
+};
+
+class PlayerAI : public Player {
+    public:
+    PlayerAI() : Player() {};
+    void placeShips() override {
+        // TODO
+        std::cout << "ai player placed ships" << std::endl;
+    }
+    bool doTurn() override {
+        // TODO
+        std::cout << "ai player done turn" << std::endl;
+        return false;
+    }
+    void placeSingleShip(int firstPosX, int firstPosY, int secondPosX, int secondPosY, int shipLength) {
+        // TODO
+    }
 };
 
 #endif
