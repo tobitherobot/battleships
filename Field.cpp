@@ -1,15 +1,24 @@
 #include <iostream>
-
 #include "Field.h"
 
 Field::Field() {
     
+    countShipsHit = 0;
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 10; j++) {
             field[i][j] = '~';
         }
     }
 };
+
+void Field::placeShip(int firstPosX, int firstPosY, int secondPosX, int secondPosY) {
+
+    for (int i = firstPosX; i <= secondPosX; i++) {
+        for (int j = secondPosX; j <= secondPosY; j++) {
+            field[i][j] = 'O';
+        }
+    }
+}
 
 bool Field::shootPos(int posX, int posY) {
 

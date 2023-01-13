@@ -10,8 +10,8 @@ void Game::start() {
     std::cout << "Welcome" << std::endl;
 
     chooseMode();
-    player1->placeShips();
-    player2->placeShips();
+    player1->enterShips();
+    player2->enterShips();
 
     int playerBegins = GetRandomNumberBetween(1, 2);
     if (playerBegins == 1) {
