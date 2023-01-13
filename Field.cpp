@@ -77,6 +77,10 @@ void Field::reduceShipComponents() {
     shipComponents--;
 };
 
+int Field::getShipComponents() {
+    return shipComponents;
+}
+
 int Field::charToInt(char ch){
     return int(ch - 64);
 };

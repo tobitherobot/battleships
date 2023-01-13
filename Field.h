@@ -13,6 +13,7 @@ class Field {
     int charToInt(char);
     void shoot(Field);
     void reduceShipComponents();
+    int getShipComponents();
 
     private:
     char field[10][10];

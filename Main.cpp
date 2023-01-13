@@ -38,12 +38,18 @@ int main() {
         //turn player one
         printTwoFields(fieldOne, fieldTwo);
         fieldOne.shoot(fieldTwo);
+        if (fieldTwo.getShipComponents() == 0) {
+            winner = 1;
+        }
         if (winner != 0) {
             break;
         }
         //turn player two
         printTwoFields(fieldTwo, fieldOne);
         fieldOne.shoot(fieldOne);
+        if (fieldOne.getShipComponents() == 0) {
+            winner = 2;
+        }
         if (winner != 0) {
             break;
         }
