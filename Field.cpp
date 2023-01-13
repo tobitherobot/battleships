@@ -49,10 +49,6 @@ void Field::printFogField() {
     std::cout << std::endl;
 };
 
-char Field::checkPos(int first, int second) {
-    //returns the state of the given location
-    return field[first - 1][second - 1];
-};
 void Field::shoot(Field enemy) {
     std::string coordinates;
     int first;
@@ -63,14 +59,18 @@ void Field::shoot(Field enemy) {
     first = charToInt(coordinates.at(0));
     second = int(coordinates.at(1) - 48);
 
-    if(enemy.checkPos(first,second) == 'O') {
+    if (enemy.checkPos(first,second) == 'O') {
         std::cout << "Hit!" << std::endl;
-        enemy.setpos(first, second, 'X');
+        enemy.setPos(first, second, 'X');
         enemy.reduceShipComponents();
     } else {
         std::cout << "Miss!" << std::endl;
-        enemy.setpos(first, second, 'M');
+        enemy.setPos(first, second, 'M');
     }
+};
+
+void Field::setPos(int first, int second, char symbol) {
+    field[first - 1][second - 1] = symbol;
 };
 
 void Field::reduceShipComponents() {
@@ -90,10 +90,6 @@ char Field::checkPos(int first, int second) {
     return field[first - 1][second - 1];
 };
 
-void Field::setpos(int first, int second, char symbol) {
-    field[first-1][second-1] = symbol;
-};
-
 void Field::placeShip(int len) {
     //places a ship of the length len
     bool incomplete = true;
@@ -104,8 +100,6 @@ void Field::placeShip(int len) {
         int firstPosY;
         int secondPosX;
         int secondPosY;
-        int lowerNumber;
-        int lowerLetter;
 
         std::cout << "Please enter the coordinates you want to place your ship at (length " << len << ") Example: B3-B5, C3-D3" << std::endl;
         std::cin >> input;
@@ -114,9 +108,6 @@ void Field::placeShip(int len) {
         firstPosY = int(input.at(1) - 48);
         secondPosX = charToInt(input.at(3));
         secondPosY = int(input.at(4) - 48);
-
-        lowerNumber = std::min(firstPosY, secondPosY);
-        lowerLetter = std::min(firstPosX, secondPosX);
 
         if (firstPosY - secondPosY != 0) {
             //Fall, dass das Schiff in X-Richtung platziert wurde
@@ -138,7 +129,7 @@ void Field::placeShip(int len) {
                 }
             }
             for (int i = 0; i < len; i++) {
-                field[firstPosY + i - 1][firstPosX - 1] = 'O';
+                field[firstPosX + i - 1][firstPosY - 1] = 'O';
             }
         }
         incomplete = false;

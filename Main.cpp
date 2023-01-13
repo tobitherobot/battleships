@@ -3,11 +3,19 @@
 #include <stdlib.h>
 #include <iostream>
 
+void printTwoFields(Field p1, Field p2) {
+    p2.printFogField();
+    p1.printField();
+}
+
 int main() {
     Field fieldOne;
     Field fieldTwo;
 
     int winner = 0;
+
+    fieldOne.shoot(fieldTwo);
+    fieldTwo.printField();
 
     fieldOne.placeShip(5);
     fieldOne.printField();
@@ -62,9 +70,4 @@ int main() {
     }
 
     return 0;
-}
-
-void printTwoFields(Field p1, Field p2) {
-    p2.printFogField();
-    p1.printField();
 }

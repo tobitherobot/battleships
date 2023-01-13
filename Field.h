@@ -5,7 +5,7 @@ class Field {
     public:
     Field();
     char checkPos(int, int);
-    void setpos(int, int, char);
+    void setPos(int, int, char);
     void printField();
     void printFogField();
     bool checkSurroundings(int, int);
