@@ -5,11 +5,10 @@ class Field {
     public:
     Field();
     bool shootPos(int, int);
-    void placeShip(int, int, int, int);
+    Field* placeShip(int, int, int, int);
     void printField();
     int countShipsHit;
     char field[10][10];
-
 };
 
 #endif

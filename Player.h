@@ -9,16 +9,17 @@ class Player {
     ~Player() {};
     virtual bool doTurn() = 0;
     virtual void enterShips() = 0;
-    Field getField() { return field;};
+    Field getField() { return field; };
+    Field field;
 
     private:
     void placeSingleShip(int);
-    Field field;
 };
 
 class PlayerLocal : public Player {
     public:
     PlayerLocal() : Player() {};
+
     void enterShips() override {
         int shipLengths[5] = {5,4,3,3,2};
         for (int shipLength : shipLengths) {
@@ -26,6 +27,9 @@ class PlayerLocal : public Player {
         }
         std::cout << "Placed all ships" << std::endl;
     }
+    int charToInt(char ch){
+        return int(ch - 64) - 1;
+    };
     void enterShip(int shipLength) {
 
         int firstPosX;
@@ -38,10 +42,10 @@ class PlayerLocal : public Player {
             std::cout << "Enter your coordinates for ship of length " << shipLength << ":" << std::endl;
             std::cin >> input;
             
-            int firstPosX = (int) (input.at(0) - 'A');
-            int firstPosY = (int) (input.at(1) - '1');
-            int secondPosX = (int) (input.at(3) - 'A');
-            int secondPosY = (int) (input.at(4) - '1');
+            firstPosX = charToInt(input.at(0));
+            firstPosY = int(input.at(1) - 49);
+            secondPosX = charToInt(input.at(3));
+            secondPosY = int(input.at(4) - 49);
 
             if (firstPosX < 0 || firstPosX > 9 || firstPosY < 0 || firstPosY > 9 || secondPosX < 0 || secondPosX > 9 || secondPosY < 0 || secondPosY > 9) {
                 std::cout << "Your input " << input << " is incorrect! Please try again!" << std::endl;
@@ -51,14 +55,15 @@ class PlayerLocal : public Player {
                 std::cout << "Your coordinates " << input << " are not in one row/column! Please try again!" << std::endl;
                 continue;
             }
-            else if (abs(firstPosX - firstPosY) + abs(secondPosX - secondPosY) + 1 != shipLength) {
+            else if (abs(firstPosX - secondPosX) + abs(firstPosY - secondPosY) + 1 != shipLength) {
                 std::cout << "Your input " << input << " is not length " << shipLength << "! Please try again!" << std::endl;
                 continue;
             }
             else break; // TODO check if ship is already placed in the way
         }
 
-        getField().placeShip(std::min(firstPosX, secondPosX), std::min(firstPosY, secondPosY), std::max(firstPosX, secondPosX), std::max(firstPosY, secondPosY));
+        field = *getField().placeShip(std::min(firstPosX, secondPosX), std::min(firstPosY, secondPosY), std::max(firstPosX, secondPosX), std::max(firstPosY, secondPosY));
+        getField().printField();
     }
     bool doTurn() override {
         // TODO

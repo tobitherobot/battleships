@@ -3,7 +3,9 @@
 #include "Game.h"
 #include "CppRandom.h"
 
-Game::Game() { }
+Game::Game() {
+
+}
 
 void Game::start() {
 

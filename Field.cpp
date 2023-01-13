@@ -11,13 +11,15 @@ Field::Field() {
     }
 };
 
-void Field::placeShip(int firstPosX, int firstPosY, int secondPosX, int secondPosY) {
+Field* Field::placeShip(int firstPosX, int firstPosY, int secondPosX, int secondPosY) {
 
     for (int i = firstPosX; i <= secondPosX; i++) {
-        for (int j = secondPosX; j <= secondPosY; j++) {
+        for (int j = firstPosY; j <= secondPosY; j++) {
+            std::cout << i << j << std::endl;
             field[i][j] = 'O';
         }
     }
+    return this;
 }
 
 bool Field::shootPos(int posX, int posY) {
