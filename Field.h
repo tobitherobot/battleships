@@ -11,7 +11,7 @@ class Field {
     bool checkSurroundings(int, int);
     void placeShip(int);
     int charToInt(char);
-    void shoot(Field);
+    void shoot(Field &enemy);
     void reduceShipComponents();
     int getShipComponents();
 

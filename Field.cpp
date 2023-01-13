@@ -49,7 +49,7 @@ void Field::printFogField() {
     std::cout << std::endl;
 };
 
-void Field::shoot(Field enemy) {
+void Field::shoot(Field &enemy) {
     std::string coordinates;
     int first;
     int second;
@@ -104,109 +104,113 @@ void Field::placeShip(int len) {
         std::cout << "Please enter the coordinates you want to place your ship at (length " << len << ") Example: B3-B5, C3-D3" << std::endl;
         std::cin >> input;
 
-        firstPosX = charToInt(input.at(0));
-        firstPosY = int(input.at(1) - 48);
-        secondPosX = charToInt(input.at(3));
-        secondPosY = int(input.at(4) - 48);
+        firstPosY = charToInt(input.at(0));
+        firstPosX = int(input.at(1) - 48);
+        secondPosY = charToInt(input.at(3));
+        secondPosX = int(input.at(4) - 48);
+
+        std::cout << firstPosX << firstPosY << secondPosX << secondPosY << std::endl;
 
         if (firstPosY - secondPosY != 0) {
             //Fall, dass das Schiff in X-Richtung platziert wurde
             for (int i = 0; i < len; i++) {
-                if (!checkSurroundings(firstPosX + i, firstPosY)) {
+                if (!checkSurroundings(firstPosY + i, firstPosX)) {
                     std::cout << "Invalid location, try again." << std::endl;
                     goto bigLoop;
                 }
             }
             for (int i = 0; i < len; i++) {
-                field[firstPosY - 1][firstPosX + i - 1] = 'O';
+                field[firstPosY - 1 + i][firstPosX - 1] = 'O';
             }
         } else {
             //Fall, dass das Schiff in Y-Richtung platziert wurde
             for (int i = 0; i < len; i++) {
-                if (!checkSurroundings(firstPosX, firstPosY + i)) {
+                if (!checkSurroundings(firstPosY, firstPosX + i)) {
                     std::cout << "Invalid location, try again." << std::endl;
                     goto bigLoop;
                 }
             }
             for (int i = 0; i < len; i++) {
-                field[firstPosX + i - 1][firstPosY - 1] = 'O';
+                field[firstPosY - 1][firstPosX - 1 + i] = 'O';
             }
         }
         incomplete = false;
     }
 };
 
-bool Field::checkSurroundings(int first, int second) {
+bool Field::checkSurroundings(int y, int x) {
     //checks if the chosen or the surrounding locations contain ships
+    y--;
+    x--;
 
     //top-left
-    if (first == 1 && second == 1) {
+    if (y == 1 && x == 1) {
         for (int f = 0; f < 2; f++) {
             for (int s = 0; s < 2; s++) {
-                if (field[first + f - 1][second + s - 1] == 'O') return false;
-            }
-        }
-        return true;
-    }
-    //top-right
-    if (first == 10 && second == 1) {
-        for (int f = -1; f < 1; f++) {
-            for (int s = 0; s < 2; s++) {
-                if (field[first + f - 1][second + s - 1] == 'O') return false;
-            }
-        }
-        return true;
-    }
-    //bottom-right
-    if (first == 10 && second == 10) {
-        for (int f = -1; f < 1; f++) {
-            for (int s = -1; s < 1; s++) {
-                if (field[first + f - 1][second + s - 1] == 'O') return false;
+                if (field[y + f][x + s] == 'O') return false;
             }
         }
         return true;
     }
     //bottom-left
-    if (first == 1 && second == 10) {
+    if (y == 10 && x == 1) {
+        for (int f = -1; f < 1; f++) {
+            for (int s = 0; s < 2; s++) {
+                if (field[y + f][x + s] == 'O') return false;
+            }
+        }
+        return true;
+    }
+    //bottom-right
+    if (y == 10 && x == 10) {
+        for (int f = -1; f < 1; f++) {
+            for (int s = -1; s < 1; s++) {
+                if (field[y + f][x + s] == 'O') return false;
+            }
+        }
+        return true;
+    }
+    //top-right
+    if (y == 1 && x == 10) {
         for (int f = 0; f < 2; f++) {
             for (int s = -1; s < 1; s++) {
-                if (field[first + f - 1][second + s - 1] == 'O') return false;
-            }
-        }
-        return true;
-    }
-    //top
-    if (second == 1) {
-        for (int f = -1; f < 2; f++) {
-            for (int s = 0; s < 2; s++) {
-                if (field[first + f - 1][second + s - 1] == 'O') return false;
-            }
-        }
-        return true;
-    }
-    //right
-    if (first == 10) {
-        for (int f = -1; f < 1; f++) {
-            for (int s = -1; s < 2; s++) {
-                if (field[first + f - 1][second + s - 1] == 'O') return false;
-            }
-        }
-        return true;
-    }
-    //bottom
-    if (second == 10) {
-        for (int f = -1; f < 2; f++) {
-            for (int s = -1; s < 1; s++) {
-                if (field[first + f - 1][second + s - 1] == 'O') return false;
+                if (field[y + f][x + s] == 'O') return false;
             }
         }
         return true;
     }
     //left
-    if (first == 1) {
+    if (x == 1) {
+        for (int f = -1; f < 2; f++) {
+            for (int s = 0; s < 2; s++) {
+                if (field[y + f][x + s] == 'O') return false;
+            }
+        }
+        return true;
+    }
+    //bottom
+    if (y == 10) {
+        for (int f = -1; f < 1; f++) {
+            for (int s = -1; s < 2; s++) {
+                if (field[y + f][x + s] == 'O') return false;
+            }
+        }
+        return true;
+    }
+    //right
+    if (x == 10) {
+        for (int f = -1; f < 2; f++) {
+            for (int s = -1; s < 1; s++) {
+                if (field[y + f][x + s] == 'O') return false;
+            }
+        }
+        return true;
+    }
+    //top
+    if (y == 1) {
         for (int f = 0; f < 2; f++) {
             for (int s = -1; s < 2; s++) {
-                if (field[first + f - 1][second + s - 1] == 'O') return false;
+                if (field[y + f][x + s] == 'O') return false;
             }
         }
         return true;
@@ -214,7 +218,7 @@ bool Field::checkSurroundings(int first, int second) {
     //no walls
     for (int f = -1; f < 2; f++) {
         for (int s = -1; s < 2; s++) {
-            if (field[first + f - 1][second + s - 1] == 'O') return false;
+            if (field[y + f][x + s] == 'O') return false;
         }
     }
     return true;
