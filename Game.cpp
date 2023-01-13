@@ -3,9 +3,7 @@
 #include "Game.h"
 #include "CppRandom.h"
 
-Game::Game() {
-
-}
+Game::Game() {}
 
 void Game::start() {
 
@@ -53,7 +51,7 @@ void Game::chooseMode() {
         std::cout << "> [2] Player Mode (against local player)" << std::endl;
         std::cin >> inputMode;
 
-        if (inputMode == 1 || inputMode == 2) correctInput = true;
+        if (inputMode == 1 || inputMode == 2 || inputMode == 0) correctInput = true;
         else std::cout << "Couldn't understand " << inputMode << "! Please try again!" << std::endl;
     }
     while (!correctInput);
@@ -64,10 +62,16 @@ void Game::chooseMode() {
         mode = 1;
         std::cout << "Playing with 1 Player!" << std::endl;
     }
-    else {
+    else if (inputMode == 2) {
         player1 = new PlayerLocal;
         player2 = new PlayerLocal;
         mode = 2;
         std::cout << "Playing with 2 Players!" << std::endl;
+    }
+    else {
+        player1 = new PlayerAI;
+        player2 = new PlayerAI;
+        mode = 0;
+        std::cout << "Playing with 0 Players lol" << std::endl;
     }
 }
