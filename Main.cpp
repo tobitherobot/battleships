@@ -1,9 +1,9 @@
-#include "Field.cpp"
-
 #include <iostream>
+#include <Game.cpp>
 
 int main() {
-    Field field;
-    field.printField();
+    Game game;
+    game.start();
+    
     return 0;
 }

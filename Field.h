@@ -4,7 +4,7 @@
 class Field {
     public:
     Field();
-    char checkPos(int, int);
+    bool shootPos(int, int);
     void printField();
 
     private:
