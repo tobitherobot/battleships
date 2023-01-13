@@ -25,6 +25,8 @@ class PlayerLocal : public Player {
     }
     bool doTurn() override {
         // TODO
+        std::string x;
+        std::cin >> x;
         std::cout << "local player done turn" << std::endl;
         return false;
     }

@@ -32,7 +32,8 @@ void Game::start() {
             didTurnHit = nextPlayer->doTurn();
         } while (didTurnHit);
         
-        //std::cout << (nextPlayer* == player1) << " " << (nextPlayer* == player2) << std::endl;
+        if (nextPlayer == player1) nextPlayer = player2;
+        else nextPlayer = player1;
 
         isGameOver = player1->getField().countShipsHit == 17 || player2->getField().countShipsHit == 17;
     }
@@ -41,28 +42,30 @@ void Game::start() {
 
 void Game::chooseMode() {
 
-    std::string input;
+    int inputMode;
     bool correctInput = false;
 
     do {
         std::cout << "What mode would you like to play in?" << std::endl;
         std::cout << "> [1] Player Mode (against AI opponent)" << std::endl;
         std::cout << "> [2] Player Mode (against local player)" << std::endl;
-        std::cin >> input;
+        std::cin >> inputMode;
 
-        if (input.compare("1") || input.compare("2")) correctInput = true;
-        else std::cout << "Couldn't understand " << input << "! Please try again!" << std::endl;
+        if (inputMode == 1 || inputMode == 2) correctInput = true;
+        else std::cout << "Couldn't understand " << inputMode << "! Please try again!" << std::endl;
     }
     while (!correctInput);
 
-    if (input.compare("1")) {
+    if (inputMode == 1) {
         player1 = new PlayerLocal;
         player2 = new PlayerAI;
         mode = 1;
+        std::cout << "Playing with 1 Player!" << std::endl;
     }
     else {
         player1 = new PlayerLocal;
         player2 = new PlayerLocal;
         mode = 2;
+        std::cout << "Playing with 2 Players!" << std::endl;
     }
 }
