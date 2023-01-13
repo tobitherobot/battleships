@@ -3,6 +3,7 @@
 #include <iostream>
 
 Field::Field() {
+    shipComponents = 17;
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 10; j++) {
             field[i][j] = '~';
@@ -27,9 +28,48 @@ void Field::printField() {
     std::cout << std::endl;
 };
 
+void Field::shoot(Field enemy)
+{
+std::string coordinates;
+int first;
+int second;
+
+std::cout << "Enter coordinates to shoot at. Example: A7" << std::endl;
+std::cin >> coordinates;
+first = charToInt(coordinates.at(0));
+second = coordinates.at(1);
+
+if(enemy.checkPos(first,second) == 'O')
+{
+std::cout << "Hit!" << std::endl;
+enemy.setpos(first, second, 'X');
+enemy.reduceShipComponents();
+}
+else 
+{
+std::cout << "Miss!" << std::endl;
+enemy.setpos(first, second, 'M');
+}
+
+};
+
+void Field::reduceShipComponents()
+{
+    shipComponents--;
+};
+
+int Field::charToInt(char ch){
+return int(ch - 64);
+};
+
 char Field::checkPos(int first, int second) {
     //returns the state of the given location
-    return field[first][second];
+    return field[first - 1][second - 1];
+};
+
+void Field::setpos(int first, int second, char symbol)
+{
+field[first-1][second-1] = symbol;
 };
 
 void Field::placeShip(int len) {
