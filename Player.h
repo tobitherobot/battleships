@@ -73,6 +73,7 @@ class PlayerLocal : public Player {
                         break;
                     }
                 }
+                if (!inputCorrect) break;
             }
         }
 
@@ -120,8 +121,6 @@ class PlayerLocal : public Player {
         for (int shipLength : shipLengths) {
             enterShip(shipLength);
         }
-        std::cout << "Press enter to end turn: " << std::endl;
-        std::cin.ignore();
     }
 };
 

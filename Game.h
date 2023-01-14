@@ -8,8 +8,10 @@ class Game {
     Game();
     void start();
     void chooseMode();
+    void win();
     void save();
     void load();
+    void clearConsole();
 
     private:
     Player* player1;

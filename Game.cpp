@@ -11,10 +11,16 @@ void Game::start() {
 
     // select if one or two players are playing
     chooseMode();
+    std::cin.ignore();
 
     // both players place their ships
     player1->enterShips();
+    std::cout << "Press enter do end turn:";
+    std::cin.ignore();
+
     player2->enterShips();
+    std::cout << "Press enter do end turn:";
+    std::cin.ignore();
 
     // random player, who begins the game, is chosen
     int playerBegins = GetRandomNumberBetween(1, 2);
@@ -30,9 +36,9 @@ void Game::start() {
     }
 
     // main game loop
-    do {
-        // clear console
-        //std::system("cls");
+    do 
+    {
+        //clearConsole();
 
         if (currentPlayer == player1) std::cout << "Player 1, it's your turn!" << std::endl;
         else std::cout << "Player 2, it's your turn!" << std::endl;
@@ -44,15 +50,21 @@ void Game::start() {
         {
             didTurnHit = currentPlayer->doTurn(currentOpponent->field);
 
-            if (currentPlayer == player1) std::cout << "Player 1 shot and " << (didTurnHit ? " hit a ship, it's Player 1's turn again!" : "missed!") << std::endl;
-            else std::cout << "Player 2 shot and " << (didTurnHit ? " hit a ship, it's Player 2's turn again!" : "missed!") << std::endl;
+            // check if all ships have been sunken
+            if (didTurnHit) {
+                if (currentOpponent->field->countShipsHit == 17) {
+                    win();
+                    break;
+                }
+            }
+
+            if (currentPlayer == player1) std::cout << "Player 1 shot and " << (didTurnHit ? "hit a ship, it's Player 1's turn again!" : "missed!") << std::endl;
+            else std::cout << "Player 2 shot and " << (didTurnHit ? "hit a ship, it's Player 2's turn again!" : "missed!") << std::endl;
         } 
         while (didTurnHit);
 
-        // TODO cin.ignore funktioniert hier iwie nicht so gut
-        std::string next;
-        std::cout << "Write something to end turn: " << std::endl;
-        std::cin >> next;
+        std::cout << "Press enter do end turn:";
+        std::cin.ignore();
 
         // switching roles of current player and current opponent 
         if (currentPlayer == player1) {
@@ -108,4 +120,42 @@ void Game::chooseMode() {
         mode = 0;
         std::cout << "Playing with 0 Players lol" << std::endl;
     }
+}
+
+void Game::win() {
+
+    if (currentPlayer == player1) {
+        std::cout << "Player 1 has won!" << std::endl;
+        std::cout << "Player 1 Field:" << std::endl;
+        currentPlayer->field->printField();
+        std::cout << "Player 2 Field:" << std::endl;
+        currentOpponent->field->printField();
+    }
+    else {
+        std::cout << "Player 2 has won!" << std::endl;
+        std::cout << "Player 2 Field:" << std::endl;
+        currentPlayer->field->printField();
+        std::cout << "Player 1 Field:" << std::endl;
+        currentOpponent->field->printField();
+    }
+
+    std::string input;
+    bool isCorrectInput = false;
+
+    do {
+        std::cout << "Would you like to start a [new] game or [quit]?" << std::endl;
+        std::cin >> input;
+
+        if (!input.compare("new") || !input.compare("quit")) {
+            isCorrectInput = true;
+        }
+        else std::cout << "Your input " << input << " couldn't be interpreted! Please try again!" << std::endl;
+    }
+    while (!isCorrectInput);
+
+    if (!input.compare("new")) this->start();
+}
+
+void Game::clearConsole() {
+    for (int i = 0; i < 20; i++) std::system("cls");
 }
