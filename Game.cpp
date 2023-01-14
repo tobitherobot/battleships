@@ -13,24 +13,22 @@ void Game::start() {
     chooseMode();
 
     // both players place their ships
+    std::cout << "Player 1, please place your ships." << std::endl;
+    std::cout << std::endl;
     player1->enterShips();
-    if (typeid(player1) == typeid(PlayerLocal)) {
-        std::cout << "Press enter to end ship placement: ";
-        std::cin.ignore();
-    }
 
+    clearConsole();
+
+    std::cout << "Player 2, please place your ships." << std::endl;
+    std::cout << std::endl;
     player2->enterShips();
-    if (typeid(player2) == typeid(PlayerLocal)) {
-        std::cout << "Press enter to end ship placement: ";
-        std::cin.ignore();
-    }
 
     // random player, who begins the game, is chosen
     int playerBegins = GetRandomNumberBetween(1, 2);
     if (playerBegins == 1) {
         currentPlayer = player1;
         currentOpponent = player2;
-    }  
+    }
     else {
         currentPlayer = player2;
         currentOpponent = player1;
@@ -39,10 +37,16 @@ void Game::start() {
     // main game loop
     do 
     {
-        //clearConsole();
+        clearConsole();
 
-        if (currentPlayer == player1) std::cout << "Player 1, it's your turn!" << std::endl;
-        else std::cout << "Player 2, it's your turn!" << std::endl;
+        if (currentPlayer == player1) {
+            std::cout << "Player 1, it's your turn!" << std::endl;
+            std::cout << std::endl;
+        } 
+        else {
+            std::cout << "Player 2, it's your turn!" << std::endl;
+            std::cout << std::endl;
+        } 
 
         bool didTurnHit;
         
@@ -59,9 +63,14 @@ void Game::start() {
                 }
             }
 
-            if (currentPlayer == player1) std::cout << "Player 1 shot and " << (didTurnHit ? "hit a ship, it's Player 1's turn again!" : "missed!") << std::endl;
-            else std::cout << "Player 2 shot and " << (didTurnHit ? "hit a ship, it's Player 2's turn again!" : "missed!") << std::endl;
-        } 
+            if (currentPlayer == player1) {
+                std::cout << "Player 1 shot and " << (didTurnHit ? "hit a ship, it's Player 1's turn again!" : "missed!") << std::endl;
+                std::cout << std::endl;
+            } else  {
+                std::cout << "Player 2 shot and " << (didTurnHit ? "hit a ship, it's Player 2's turn again!" : "missed!") << std::endl;
+                std::cout << std::endl;
+            }
+        }
         while (didTurnHit);
 
         if (typeid(currentPlayer) == typeid(PlayerLocal)) {
@@ -88,34 +97,39 @@ void Game::start() {
 // one or two player mode is selected
 void Game::chooseMode() {
 
-    int inputMode;
+    std::string inputMode;
     bool correctInput = false;
 
     do {
         std::cout << "What mode would you like to play in?" << std::endl;
         std::cout << "> [1] Player Mode (against AI opponent)" << std::endl;
         std::cout << "> [2] Player Mode (against local player)" << std::endl;
+        std::cout << "> [0] AI Mode (AI against AI)" << std::endl;
+        std::cout << "> [quit] Quit the game" << std::endl;
         std::cin >> inputMode;
         std::cin.ignore();
 
-        if (inputMode == 1 || inputMode == 2 || inputMode == 0) correctInput = true;
-        else std::cout << "ERROR: Your input '" << inputMode << "' couldn't be interpeted! Please try again!" << std::endl;
+        if (!inputMode.compare("1") || !inputMode.compare("2") || !inputMode.compare("0") || !inputMode.compare("quit")) correctInput = true;
+        else std::cout << "ERROR: Your input '" << inputMode << "' couldn't be interpreted! Please try again!" << std::endl;
     }
     while (!correctInput);
 
-    if (inputMode == 1) {
+    if (!inputMode.compare("1")) {
         // mode 1: local player plays against an ai opponent
         player1 = new PlayerLocal;
         player2 = new PlayerAI;
         mode = 1;
         std::cout << "Playing with 1 Player!" << std::endl;
     }
-    else if (inputMode == 2) {
+    else if (!inputMode.compare("2")) {
         // mode 2: two local players take turns and play against each other
         player1 = new PlayerLocal;
         player2 = new PlayerLocal;
         mode = 2;
         std::cout << "Playing with 2 Players!" << std::endl;
+    } else if (!inputMode.compare("quit")) {
+        // quit the game
+        exit(0);
     }
     else {
         // small easter egg: mode 0 makes two ai players play against each other
@@ -169,5 +183,7 @@ void Game::greeting() {
 }
 
 void Game::clearConsole() {
-    for (int i = 0; i < 20; i++) std::system("cls");
+    for (int i = 0; i < 50; i++) {
+        std::cout << std::endl;
+    }
 }

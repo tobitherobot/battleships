@@ -33,6 +33,7 @@ class PlayerLocal : public Player {
         int maxY;
         bool inputCorrect = false;
 
+        field->printField();
         while (!inputCorrect) 
         {
             std::cout << "Enter the coords, where you want to place your ship of length " << shipLength << ": (e.g. A1-A" << shipLength << ")" << std::endl;
@@ -79,7 +80,6 @@ class PlayerLocal : public Player {
         }
 
         field->placeShip(minX, minY, maxX, maxY);
-        field->printField();
     }
 
     bool doTurn(Field* opponentField) override 
@@ -89,23 +89,18 @@ class PlayerLocal : public Player {
         std::string input;
         bool inputCorrect = false;
 
+        opponentField->printFog();
+        std::cout << "---------------------" << std::endl;
+        std::cout << std::endl;
+        field->printField();
+
         while (!inputCorrect) 
         {
             std::cout << "Enter the coords, where you want to shoot: (e.g. A1)" << std::endl;
-            std::cout << "You can also view your [own] field or your [opp]onent's..." << std::endl;
             std::cin >> input;
             std::cin.ignore();
 
             inputCorrect = true;
-            
-            if (!input.compare("own") || !input.compare("opp")) 
-            {                
-                if (!input.compare("own")) field->printField();
-                else opponentField->printFog();
-                
-                inputCorrect = false;
-                continue;
-            }
 
             posX = int(toupper(input.at(0)) - 65);
             posY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
@@ -123,7 +118,6 @@ class PlayerLocal : public Player {
         }
 
         bool hasHit = opponentField->shootAt(posX, posY);
-        opponentField->printFog();
         if (opponentField->isShipSunk(posX, posY)) std::cout << "! SHIP SUNK !" << std::endl;
 
         return hasHit;
@@ -225,7 +219,6 @@ class PlayerAI : public Player {
         while (!isCorrectPos);
 
         bool hasHit = opponentField->shootAt(posX, posY);
-        opponentField->printFog();
         if (opponentField->isShipSunk(posX, posY)) std::cout << "! SHIP SUNK !" << std::endl;
 
         return hasHit;
@@ -238,6 +231,7 @@ class PlayerAI : public Player {
             enterShip(shipLength);
         }
         std::cout << "AI Player placed all his ships!" << std::endl;
+        std::cout << std::endl;
     }
 };
 
