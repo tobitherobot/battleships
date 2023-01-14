@@ -4,7 +4,6 @@
 - keine clevere ai fürs schießen
 
 # kleines
-
 - absolut alles und nichts ist public/private
 - keine schiff-versenkt detection
 - spiel gewonnen detection funktioniert wahrscheinlich nicht

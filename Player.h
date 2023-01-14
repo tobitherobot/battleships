@@ -120,7 +120,7 @@ class PlayerLocal : public Player {
         for (int shipLength : shipLengths) {
             enterShip(shipLength);
         }
-        std::cout << "Press enter to end turn: ";
+        std::cout << "Press enter to end turn: " << std::endl;
         std::cin.ignore();
     }
 };
@@ -212,7 +212,7 @@ class PlayerAI : public Player {
         while (!isCorrectPos);
 
         bool hasHit = opponentField->shootAt(posX, posY);
-        //field->printField();
+        opponentField->printFog();
         return hasHit;
     }
 
@@ -223,7 +223,6 @@ class PlayerAI : public Player {
             enterShip(shipLength);
         }
         std::cout << "AI Player placed all his ships!" << std::endl;
-        //field->printField();
     }
 };
 

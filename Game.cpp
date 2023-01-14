@@ -32,7 +32,7 @@ void Game::start() {
     // main game loop
     do {
         // clear console
-        std::system("cls");
+        //std::system("cls");
 
         if (currentPlayer == player1) std::cout << "Player 1, it's your turn!" << std::endl;
         else std::cout << "Player 2, it's your turn!" << std::endl;
@@ -48,7 +48,12 @@ void Game::start() {
             else std::cout << "Player 2 shot and " << (didTurnHit ? " hit a ship, it's Player 2's turn again!" : "missed!") << std::endl;
         } 
         while (didTurnHit);
-        
+
+        // TODO cin.ignore funktioniert hier iwie nicht so gut
+        std::string next;
+        std::cout << "Write something to end turn: " << std::endl;
+        std::cin >> next;
+
         // switching roles of current player and current opponent 
         if (currentPlayer == player1) {
             currentPlayer = player2;
@@ -58,11 +63,6 @@ void Game::start() {
             currentPlayer = player1;
             currentOpponent = player2;
         }
-
-        currentOpponent->field->printFog();
-
-        std::cout << "Press enter to end turn: ";
-        std::cin.ignore();
 
         // is game over check
         isGameOver = player1->field->countShipsHit == 17 || player2->field->countShipsHit == 17;
