@@ -36,8 +36,10 @@ bool Field::shootAt(int posX, int posY)
 
 // checks if, after a hit, the given coords correspond to a completely hit/sunk ship
 bool Field::isShipSunk(int posX, int posY) {
-
-    return (isShipSunkRecursive(posX-1, posY, 0) && isShipSunkRecursive(posX, posY+1, 1) && isShipSunkRecursive(posX+1, posY, 2) && isShipSunkRecursive(posX, posY-1, 3));
+    if (charAt(posX, posY) == 'X') {
+        return (isShipSunkRecursive(posX-1, posY, 0) && isShipSunkRecursive(posX, posY+1, 1) && isShipSunkRecursive(posX+1, posY, 2) && isShipSunkRecursive(posX, posY-1, 3));
+    }
+    else return false;
 }
 
 // recursive function for checking if a ship is completely hit/sunk

@@ -35,7 +35,7 @@ class PlayerLocal : public Player {
 
         while (!inputCorrect) 
         {
-            std::cout << "Enter the coords, where you want to place your ship of length " << shipLength << " (e.g. A1-A" << shipLength << "):" << std::endl;
+            std::cout << "Enter the coords, where you want to place your ship of length " << shipLength << ": (e.g. A1-A" << shipLength << ")" << std::endl;
             std::cin >> input;
             std::cin.ignore();
             inputCorrect = true;
@@ -91,12 +91,22 @@ class PlayerLocal : public Player {
 
         while (!inputCorrect) 
         {
-            std::cout << "Enter the coords, where you want to shoot:" << std::endl;
+            std::cout << "Enter the coords, where you want to shoot: (e.g. A1)" << std::endl;
+            std::cout << "You can also view your [own] field or your [opp]onent's..." << std::endl;
             std::cin >> input;
             std::cin.ignore();
 
             inputCorrect = true;
             
+            if (!input.compare("own") || !input.compare("opp")) 
+            {                
+                if (!input.compare("own")) field->printField();
+                else opponentField->printFog();
+                
+                inputCorrect = false;
+                continue;
+            }
+
             posX = int(toupper(input.at(0)) - 65);
             posY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
 
