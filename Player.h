@@ -1,16 +1,17 @@
 #ifndef PLAYER
 #define PLAYER
 
+#include <algorithm>
+
 #include "Field.cpp"
 
 class Player {
     public:
     Player() {};
     ~Player() {};
-    virtual bool doTurn() = 0;
+    virtual bool doTurn(Field* opponentField) = 0;
     virtual void enterShips() = 0;
-    Field getField() { return field; };
-    Field field;
+    Field* field;
 
     private:
     virtual void enterShip(int) = 0;
@@ -18,7 +19,9 @@ class Player {
 
 class PlayerLocal : public Player {
     public:
-    PlayerLocal() : Player() {};
+    PlayerLocal() : Player() {
+        field = new Field();
+    };
 
     void enterShips() override 
     {
@@ -40,10 +43,10 @@ class PlayerLocal : public Player {
             std::cout << "Enter your coordinates for ship of length " << shipLength << ":" << std::endl;
             std::cin >> input;
             
-            firstPosX = int(input.at(0) - 65);
-            firstPosY = int(input.at(1) - 49);
-            secondPosX = int(input.at(3) - 65);
-            secondPosY = int(input.at(4) - 49);
+            firstPosX = int(toupper(input.at(0)) - 65);
+            firstPosY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
+            secondPosX = int(toupper(input.at(input.find('-')+1)) - 65);
+            secondPosY = atoi(input.substr(input.find('-')+2).c_str()) - 1;
 
             if (firstPosX < 0 || firstPosX > 9 || firstPosY < 0 || firstPosY > 9 || secondPosX < 0 || secondPosX > 9 || secondPosY < 0 || secondPosY > 9) {
                 std::cout << "Your input " << input << " is incorrect! Please try again!" << std::endl;
@@ -57,30 +60,55 @@ class PlayerLocal : public Player {
                 std::cout << "Your input " << input << " is not length " << shipLength << "! Please try again!" << std::endl;
                 continue;
             }
-            else break; // TODO check if ship is already placed in the way
+            else if (false) {
+                // TODO check if ship is already placed in the way
+            }
+            else break;
         }
 
-        field = *getField().placeShip(std::min(firstPosX, secondPosX), std::min(firstPosY, secondPosY), std::max(firstPosX, secondPosX), std::max(firstPosY, secondPosY));
-        getField().printField();
+        field->placeShip(std::min(firstPosX, secondPosX), std::min(firstPosY, secondPosY), std::max(firstPosX, secondPosX), std::max(firstPosY, secondPosY));
+        field->printField();
     }
-    bool doTurn() override 
+    bool doTurn(Field* opponentField) override 
     {
-        // TODO
-        std::string x;
-        std::cin >> x;
-        std::cout << "local player done turn" << std::endl;
-        return false;
+        int posX;
+        int posY;
+        std::string input;
+
+        while (true) {
+            std::cout << "Enter your coordinates for the field you want to shoot:" << std::endl;
+            std::cin >> input;
+            
+            posX = int(toupper(input.at(0)) - 65);
+            posY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
+
+            if (posX < 0 || posX > 9 || posY < 0 || posY > 9) {
+                std::cout << "Your input " << input << " is incorrect! Please try again!" << std::endl;
+                continue;
+            }
+            else if (false) {
+                // TODO check if field has already been shot
+            }
+            else break;
+        }
+
+        bool hasHit = opponentField->shootAt(posX, posY);
+        opponentField->printFog();
+
+        return hasHit;
     }
 };
 
 class PlayerAI : public Player {
     public:
-    PlayerAI() : Player() {};
+    PlayerAI() : Player() {
+        field = new Field();
+    };
     void enterShips() override {
         // TODO
         std::cout << "ai player placed ships" << std::endl;
     }
-    bool doTurn() override {
+    bool doTurn(Field* opponentField) override {
         // TODO
         std::cout << "ai player done turn" << std::endl;
         return false;

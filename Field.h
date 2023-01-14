@@ -4,11 +4,13 @@
 class Field {
     public:
     Field();
-    bool shootPos(int, int);
+    char charField[10][10];
+    int countShipsHit;
+
+    bool shootAt(int, int);
     Field* placeShip(int, int, int, int);
     void printField();
-    int countShipsHit;
-    char field[10][10];
+    void printFog();
 };
 
 #endif

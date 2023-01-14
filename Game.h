@@ -7,17 +7,19 @@ class Game {
     public:
     Game();
     void start();
+    void chooseMode();
     void save();
     void load();
-    void chooseMode();
+    void encrypt();
+    void decrypt();
 
     private:
     Player* player1;
     Player* player2;
-    Player* nextPlayer;
+    Player* currentPlayer;
+    Player* currentOpponent;
     int mode;
-    void encrypt();
-    void decrypt();
+    bool isGameOver;
 };
 
 #endif

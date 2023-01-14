@@ -16,26 +16,32 @@ void Game::start() {
     int playerBegins = GetRandomNumberBetween(1, 2);
     if (playerBegins == 1) {
         std::cout << "Player 1 begins!" << std::endl;
-        nextPlayer = player1;
+        currentPlayer = player1;
+        currentOpponent = player2;
     }  
     else {
         std::cout << "Player 2 begins!" << std::endl;
-        nextPlayer = player2;
+        currentPlayer = player2;
+        currentOpponent = player1;
     }
-
-    bool isGameOver;
 
     do {
         bool didTurnHit;
         
         do {
-            didTurnHit = nextPlayer->doTurn();
+            didTurnHit = currentPlayer->doTurn(currentOpponent->field);
         } while (didTurnHit);
         
-        if (nextPlayer == player1) nextPlayer = player2;
-        else nextPlayer = player1;
+        if (currentPlayer == player1) {
+            currentPlayer = player2;
+            currentOpponent = player1;
+        }
+        else {
+            currentPlayer = player1;
+            currentOpponent = player2;
+        }
 
-        isGameOver = player1->getField().countShipsHit == 17 || player2->getField().countShipsHit == 17;
+        isGameOver = player1->field->countShipsHit == 17 || player2->field->countShipsHit == 17;
     }
     while (!isGameOver);
 }
