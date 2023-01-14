@@ -7,6 +7,7 @@ class Game {
     public:
     Game();
     void start();
+    void greeting();
     void chooseMode();
     void win();
     void save();

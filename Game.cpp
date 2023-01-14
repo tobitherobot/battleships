@@ -7,33 +7,31 @@ Game::Game() {}
 
 void Game::start() {
 
-    std::cout << "Welcome" << std::endl;
-
+    // welcome greeting when application starts
+    greeting();
     // select if one or two players are playing
     chooseMode();
 
     // both players place their ships
     player1->enterShips();
     if (typeid(player1) == typeid(PlayerLocal)) {
-        std::cout << "Press enter do end turn:";
+        std::cout << "Press enter to end ship placement: ";
         std::cin.ignore();
     }
 
     player2->enterShips();
     if (typeid(player2) == typeid(PlayerLocal)) {
-        std::cout << "Press enter do end turn:";
+        std::cout << "Press enter to end ship placement: ";
         std::cin.ignore();
     }
 
     // random player, who begins the game, is chosen
     int playerBegins = GetRandomNumberBetween(1, 2);
     if (playerBegins == 1) {
-        std::cout << "Player 1 begins!" << std::endl;
         currentPlayer = player1;
         currentOpponent = player2;
     }  
     else {
-        std::cout << "Player 2 begins!" << std::endl;
         currentPlayer = player2;
         currentOpponent = player1;
     }
@@ -67,7 +65,7 @@ void Game::start() {
         while (didTurnHit);
 
         if (typeid(currentPlayer) == typeid(PlayerLocal)) {
-            std::cout << "Press enter do end turn:";
+            std::cout << "Press enter to end turn:";
             std::cin.ignore();
         }
 
@@ -101,7 +99,7 @@ void Game::chooseMode() {
         std::cin.ignore();
 
         if (inputMode == 1 || inputMode == 2 || inputMode == 0) correctInput = true;
-        else std::cout << "Couldn't understand " << inputMode << "! Please try again!" << std::endl;
+        else std::cout << "ERROR: Your input '" << inputMode << "' couldn't be interpeted! Please try again!" << std::endl;
     }
     while (!correctInput);
 
@@ -131,18 +129,20 @@ void Game::chooseMode() {
 void Game::win() {
 
     if (currentPlayer == player1) {
-        std::cout << "Player 1 has won!" << std::endl;
+        std::cout << "! PLAYER 1 HAS WON !" << std::endl;
         std::cout << "Player 1 Field:" << std::endl;
         currentPlayer->field->printField();
         std::cout << "Player 2 Field:" << std::endl;
         currentOpponent->field->printField();
+        std::cout << "! PLAYER 1 HAS WON !" << std::endl;
     }
     else {
-        std::cout << "Player 2 has won!" << std::endl;
+        std::cout << "! PLAYER 2 HAS WON !" << std::endl;
         std::cout << "Player 2 Field:" << std::endl;
         currentPlayer->field->printField();
         std::cout << "Player 1 Field:" << std::endl;
         currentOpponent->field->printField();
+        std::cout << "! PLAYER 2 HAS WON !" << std::endl;
     }
 
     std::string input;
@@ -156,11 +156,16 @@ void Game::win() {
         if (!input.compare("new") || !input.compare("quit")) {
             isCorrectInput = true;
         }
-        else std::cout << "Your input " << input << " couldn't be interpreted! Please try again!" << std::endl;
+        else std::cout << "ERROR: Your input '" << input << "' couldn't be interpreted! Please try again!" << std::endl;
     }
     while (!isCorrectInput);
 
     if (!input.compare("new")) this->start();
+}
+
+void Game::greeting() {
+
+    std::cout << "Welcome to BATTLESHIPS" << std::endl;
 }
 
 void Game::clearConsole() {

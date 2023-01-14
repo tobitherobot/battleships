@@ -35,7 +35,7 @@ class PlayerLocal : public Player {
 
         while (!inputCorrect) 
         {
-            std::cout << "Enter your coordinates for ship of length " << shipLength << ":" << std::endl;
+            std::cout << "Enter the coords, where you want to place your ship of length " << shipLength << " (e.g. A1-A" << shipLength << "):" << std::endl;
             std::cin >> input;
             std::cin.ignore();
             inputCorrect = true;
@@ -46,17 +46,17 @@ class PlayerLocal : public Player {
             int secondPosY = atoi(input.substr(input.find('-')+2).c_str()) - 1;
 
             if (firstPosX < 0 || firstPosX > 9 || firstPosY < 0 || firstPosY > 9 || secondPosX < 0 || secondPosX > 9 || secondPosY < 0 || secondPosY > 9) {
-                std::cout << "ERROR: Your input " << input << " is incorrect! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input '" << input << "' couldn't be interpreted! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
             else if (firstPosX != secondPosX && firstPosY != secondPosY) {
-                std::cout << "ERROR: Your coordinates " << input << " are not in one row/column! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input '" << input << "' is not in one row/column! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
             else if (abs(firstPosX - secondPosX) + abs(firstPosY - secondPosY) + 1 != shipLength) {
-                std::cout << "ERROR: Your input " << input << " is not length " << shipLength << "! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input '" << input << "' is not of length " << shipLength << "! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
@@ -69,7 +69,7 @@ class PlayerLocal : public Player {
             for (int i = minX; i <= maxX; i++) {
                 for (int j = minY; j <= maxY; j++) {
                     if (field->isShipAround(i, j)) {
-                        std::cout << "ERROR: Your coordinates overlap with / touch previous set ships! Please try again!" << std::endl;
+                        std::cout << "ERROR: Your input '" << input << "' touches or overlaps with previous placed ships! Please try again!" << std::endl;
                         inputCorrect = false;
                         break;
                     }
@@ -91,7 +91,7 @@ class PlayerLocal : public Player {
 
         while (!inputCorrect) 
         {
-            std::cout << "Enter your coordinates for the field you want to shoot:" << std::endl;
+            std::cout << "Enter the coords, where you want to shoot:" << std::endl;
             std::cin >> input;
             std::cin.ignore();
 
@@ -101,12 +101,12 @@ class PlayerLocal : public Player {
             posY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
 
             if (posX < 0 || posX > 9 || posY < 0 || posY > 9) {
-                std::cout << "ERROR: Your input " << input << " is incorrect! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input '" << input << "' couldn't be interpreted! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
             else if (opponentField->charAt(posX, posY) == 'X' || opponentField->charAt(posX, posY) == 'M') {
-                std::cout << "ERROR: Your input " << input << " has already been shot! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input '" << input << "' has already been shot! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
@@ -216,6 +216,8 @@ class PlayerAI : public Player {
 
         bool hasHit = opponentField->shootAt(posX, posY);
         opponentField->printFog();
+        if (opponentField->isShipSunk(posX, posY)) std::cout << "! SHIP SUNK !" << std::endl;
+
         return hasHit;
     }
 
