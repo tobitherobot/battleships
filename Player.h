@@ -135,14 +135,6 @@ class PlayerLocal : public Player {
 // ai player is not controller by input, works/thinks for itself
 class PlayerAI : public Player {
     public:
-    bool hitNotSunk = false;
-    int hitX;
-    int hitY;
-    int smartX;
-    int smartY;
-    int direction = -1;
-    bool doSmartTurn (Field* opponentField);
-
     PlayerAI() : Player() {
         field = new Field();
     };
@@ -213,79 +205,21 @@ class PlayerAI : public Player {
         int posX;
         int posY;
         bool isCorrectPos;
+        do {
+            posX = GetRandomNumberBetween(0, 9);
+            posY = GetRandomNumberBetween(0, 9);
 
-        if (hitNotSunk) {
-            return doSmartTurn(opponentField);
-        } else {
-            do {
-                posX = GetRandomNumberBetween(0, 9);
-                posY = GetRandomNumberBetween(0, 9);
-
-                // if field has been shot at previously (miss or hit), repeat random
-                if (opponentField->charAt(posX, posY) == 'X' || opponentField->charAt(posX, posY) == 'M') {
-                    isCorrectPos = false;
-                } else isCorrectPos = true;
-            }
-            while (!isCorrectPos);
-
-            bool hasHit = opponentField->shootAt(posX, posY);
-            if (hasHit) {
-                hitNotSunk = true;
-                hitX = posX;
-                hitY = posY;
-            }
-            if (opponentField->isShipSunk(posX, posY)) std::cout << "! SHIP SUNK !" << std::endl;
-
-            return hasHit;
+            // if field has been shot at previously (miss or hit), repeat random
+            if (opponentField->charAt(posX, posY) == 'X' || opponentField->charAt(posX, posY) == 'M') {
+                isCorrectPos = false;
+            } else isCorrectPos = true;
         }
-    }
+        while (!isCorrectPos);
 
-    bool doSmartTurn(Field* opponentField)
-    {   
-        bool hasHit;
-        int shootThere;
-        if (direction == -1) {
-            shootThere = GetRandomNumberBetween(0, 3);
-        } else {
-            shootThere = direction;
-        }
-
-        //0 hoch, 1 rechts, 2 unten, 3 links
-
-        switch (shootThere)
-        {
-        //Randschuss out of bounds shootAt noch nicht gelöst
-        case 0:
-            hasHit = opponentField->shootAt(hitX - 1, hitY);
-            if (hasHit) {
-                direction = 0;
-            }
-            break;
-
-        case 1:
-            hasHit = opponentField->shootAt(hitX, hitY + 1);
-            if (hasHit) {
-                direction = 1;
-            }
-            break;
-
-        case 2:
-            hasHit = opponentField->shootAt(hitX + 1, hitY);
-            if (hasHit) {
-                direction = 2;
-            }
-            break;
-
-        case 3:
-            hasHit = opponentField->shootAt(hitX, hitY - 1);
-            if (hasHit) {
-                direction = 3;
-            }
-            break;
+        bool hasHit = opponentField->shootAt(posX, posY);
         
-        default:
-            break;
-        }
+        if (opponentField->isShipSunk(posX, posY)) std::cout << "! SHIP SUNK !" << std::endl;
+
         return hasHit;
     }
 
