@@ -33,6 +33,21 @@ bool Field::shootAt(int posX, int posY)
     return false;
 }
 
+// checks, if any position surrounding the given coordinates is occupied by a ship already
+bool Field::isShipAround(int posX, int posY) {
+
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+
+             int x = posX + i;
+             int y = posY + j;
+             if (x < 0 || x > 9 || y < 0 || y > 9) continue;
+             else if (charField[x][y] == 'O') return true;
+        }
+    }
+    return false;
+}
+
 // prints the entire char field in a readable format
 void Field::printField() {
     

@@ -9,6 +9,7 @@ class Field {
 
     bool shootAt(int, int);
     Field* placeShip(int, int, int, int);
+    bool isShipAround(int, int);
     void printField();
     void printFog();
     char charAt(int, int);

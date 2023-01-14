@@ -24,51 +24,59 @@ class PlayerLocal : public Player {
         field = new Field();
     };
 
-    void enterShips() override 
-    {
-        int shipLengths[5] = {5,4,3,3,2};
-        for (int shipLength : shipLengths) {
-            enterShip(shipLength);
-        }
-        std::cout << "Placed all ships" << std::endl;
-    }
-
     void enterShip(int shipLength) override 
     {
-        int firstPosX;
-        int firstPosY;
-        int secondPosX;
-        int secondPosY;
         std::string input;
+        int minX;
+        int minY;
+        int maxX;
+        int maxY;
+        bool inputCorrect = false;
 
-        while (true) {
+        while (!inputCorrect) 
+        {
             std::cout << "Enter your coordinates for ship of length " << shipLength << ":" << std::endl;
             std::cin >> input;
+            inputCorrect = true;
             
-            firstPosX = int(toupper(input.at(0)) - 65);
-            firstPosY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
-            secondPosX = int(toupper(input.at(input.find('-')+1)) - 65);
-            secondPosY = atoi(input.substr(input.find('-')+2).c_str()) - 1;
+            int firstPosX = int(toupper(input.at(0)) - 65);
+            int firstPosY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
+            int secondPosX = int(toupper(input.at(input.find('-')+1)) - 65);
+            int secondPosY = atoi(input.substr(input.find('-')+2).c_str()) - 1;
 
             if (firstPosX < 0 || firstPosX > 9 || firstPosY < 0 || firstPosY > 9 || secondPosX < 0 || secondPosX > 9 || secondPosY < 0 || secondPosY > 9) {
                 std::cout << "Your input " << input << " is incorrect! Please try again!" << std::endl;
+                inputCorrect = false;
                 continue;
             }
             else if (firstPosX != secondPosX && firstPosY != secondPosY) {
                 std::cout << "Your coordinates " << input << " are not in one row/column! Please try again!" << std::endl;
+                inputCorrect = false;
                 continue;
             }
             else if (abs(firstPosX - secondPosX) + abs(firstPosY - secondPosY) + 1 != shipLength) {
                 std::cout << "Your input " << input << " is not length " << shipLength << "! Please try again!" << std::endl;
+                inputCorrect = false;
                 continue;
             }
-            else if (false) {
-                // TODO check if ship is already placed in the way
+            
+            minX = std::min(firstPosX, secondPosX);
+            minY = std::min(firstPosY, secondPosY);
+            maxX = std::max(firstPosX, secondPosX);
+            maxY = std::max(firstPosY, secondPosY);
+
+            for (int i = minX; i <= maxX; i++) {
+                for (int j = minY; j <= maxY; j++) {
+                    if (field->isShipAround(i, j)) {
+                        std::cout << "Your coordinates overlap with / touch previous set ships! Please try again!" << std::endl;
+                        inputCorrect = false;
+                        break;
+                    }
+                }
             }
-            else break;
         }
 
-        field->placeShip(std::min(firstPosX, secondPosX), std::min(firstPosY, secondPosY), std::max(firstPosX, secondPosX), std::max(firstPosY, secondPosY));
+        field->placeShip(minX, minY, maxX, maxY);
         field->printField();
     }
 
@@ -77,28 +85,42 @@ class PlayerLocal : public Player {
         int posX;
         int posY;
         std::string input;
+        bool inputCorrect = false;
 
-        while (true) {
+        while (!inputCorrect) 
+        {
             std::cout << "Enter your coordinates for the field you want to shoot:" << std::endl;
             std::cin >> input;
+            inputCorrect = true;
             
             posX = int(toupper(input.at(0)) - 65);
             posY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
 
             if (posX < 0 || posX > 9 || posY < 0 || posY > 9) {
                 std::cout << "Your input " << input << " is incorrect! Please try again!" << std::endl;
+                inputCorrect = false;
                 continue;
             }
-            else if (false) {
-                // TODO check if field has already been shot
+            else if (opponentField->charAt(posX, posY) == 'X' || opponentField->charAt(posX, posY) == 'M') {
+                std::cout << "Your input " << input << " has already been shot! Please try again!" << std::endl;
+                inputCorrect = false;
+                continue;
             }
-            else break;
         }
 
         bool hasHit = opponentField->shootAt(posX, posY);
         opponentField->printFog();
 
         return hasHit;
+    }
+
+    void enterShips() override 
+    {
+        int shipLengths[5] = {5,4,3,3,2};
+        for (int shipLength : shipLengths) {
+            enterShip(shipLength);
+        }
+        std::cout << "Placed all ships" << std::endl;
     }
 };
 
@@ -132,7 +154,8 @@ class PlayerAI : public Player {
         }
         while (!isCorrectPos);
 
-        opponentField->shootAt(posX, posY);
+        bool hasHit = opponentField->shootAt(posX, posY);
+        return hasHit;
     }
 
     void enterShips() override 
