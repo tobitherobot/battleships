@@ -37,6 +37,7 @@ class PlayerLocal : public Player {
         {
             std::cout << "Enter your coordinates for ship of length " << shipLength << ":" << std::endl;
             std::cin >> input;
+            std::cin.ignore();
             inputCorrect = true;
             
             int firstPosX = int(toupper(input.at(0)) - 65);
@@ -92,6 +93,8 @@ class PlayerLocal : public Player {
         {
             std::cout << "Enter your coordinates for the field you want to shoot:" << std::endl;
             std::cin >> input;
+            std::cin.ignore();
+            
             inputCorrect = true;
             
             posX = int(toupper(input.at(0)) - 65);

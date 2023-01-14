@@ -20,5 +20,6 @@
 - aufschlussreiche fehlermeldungen
 - ganz ganz wenige fehler
 - keine nutzung von chatgpt (ok vielleicht ein bisschen für verständnisfragen)
+- schiff versenkt detection
 
 und das ganze halt noch schön ausformulieren

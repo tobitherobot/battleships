@@ -11,7 +11,6 @@ void Game::start() {
 
     // select if one or two players are playing
     chooseMode();
-    std::cin.ignore();
 
     // both players place their ships
     player1->enterShips();
@@ -93,6 +92,7 @@ void Game::chooseMode() {
         std::cout << "> [1] Player Mode (against AI opponent)" << std::endl;
         std::cout << "> [2] Player Mode (against local player)" << std::endl;
         std::cin >> inputMode;
+        std::cin.ignore();
 
         if (inputMode == 1 || inputMode == 2 || inputMode == 0) correctInput = true;
         else std::cout << "Couldn't understand " << inputMode << "! Please try again!" << std::endl;
@@ -145,6 +145,7 @@ void Game::win() {
     do {
         std::cout << "Would you like to start a [new] game or [quit]?" << std::endl;
         std::cin >> input;
+        std::cin.ignore();
 
         if (!input.compare("new") || !input.compare("quit")) {
             isCorrectInput = true;

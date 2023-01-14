@@ -9,6 +9,8 @@ class Field {
 
     bool shootAt(int, int);
     Field* placeShip(int, int, int, int);
+    bool isShipSunk(int, int);
+    bool isShipSunkRecursive(int, int, int);
     bool isShipAround(int, int);
     void printField();
     void printFog();

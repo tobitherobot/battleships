@@ -1,7 +1,6 @@
 # großes
 
 - kein spielstand speichern und wieder laden
-- keine schiff-versenkt detection
 
 # kleines
 - absolut alles und nichts ist public/private
