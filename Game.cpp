@@ -102,8 +102,8 @@ void Game::chooseMode() {
 
     do {
         std::cout << "What mode would you like to play in?" << std::endl;
-        std::cout << "> [1] Player Mode (against AI opponent)" << std::endl;
-        std::cout << "> [2] Player Mode (against local player)" << std::endl;
+        std::cout << "> [1] Singleplayer Mode (against AI opponent)" << std::endl;
+        std::cout << "> [2] Multiplayer Mode (against local player)" << std::endl;
         std::cout << "> [0] AI Mode (AI against AI)" << std::endl;
         std::cout << "> [quit] Quit the game" << std::endl;
         std::cin >> inputMode;
