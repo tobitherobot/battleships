@@ -9,10 +9,14 @@ void Game::start() {
 
     std::cout << "Welcome" << std::endl;
 
+    // select if one or two players are playing
     chooseMode();
+
+    // both players place their ships
     player1->enterShips();
     player2->enterShips();
 
+    // random player, who begins the game, is chosen
     int playerBegins = GetRandomNumberBetween(1, 2);
     if (playerBegins == 1) {
         std::cout << "Player 1 begins!" << std::endl;
@@ -25,13 +29,16 @@ void Game::start() {
         currentOpponent = player1;
     }
 
+    // main game loop
     do {
         bool didTurnHit;
         
+        // player makes his turn, can shoot again if he hit a ship
         do {
             didTurnHit = currentPlayer->doTurn(currentOpponent->field);
         } while (didTurnHit);
         
+        // switching roles of current player and current opponent 
         if (currentPlayer == player1) {
             currentPlayer = player2;
             currentOpponent = player1;
@@ -41,11 +48,13 @@ void Game::start() {
             currentOpponent = player2;
         }
 
+        // is game over check
         isGameOver = player1->field->countShipsHit == 17 || player2->field->countShipsHit == 17;
     }
     while (!isGameOver);
 }
 
+// one or two player mode is selected
 void Game::chooseMode() {
 
     int inputMode;
@@ -63,18 +72,21 @@ void Game::chooseMode() {
     while (!correctInput);
 
     if (inputMode == 1) {
+        // mode 1: local player plays against an ai opponent
         player1 = new PlayerLocal;
         player2 = new PlayerAI;
         mode = 1;
         std::cout << "Playing with 1 Player!" << std::endl;
     }
     else if (inputMode == 2) {
+        // mode 2: two local players take turns and play against each other
         player1 = new PlayerLocal;
         player2 = new PlayerLocal;
         mode = 2;
         std::cout << "Playing with 2 Players!" << std::endl;
     }
     else {
+        // small easter egg: mode 0 makes two ai players play against each other
         player1 = new PlayerAI;
         player2 = new PlayerAI;
         mode = 0;

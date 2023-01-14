@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "Field.cpp"
+#include "CppRandom.h"
 
 class Player {
     public:
@@ -31,6 +32,7 @@ class PlayerLocal : public Player {
         }
         std::cout << "Placed all ships" << std::endl;
     }
+
     void enterShip(int shipLength) override 
     {
         int firstPosX;
@@ -69,6 +71,7 @@ class PlayerLocal : public Player {
         field->placeShip(std::min(firstPosX, secondPosX), std::min(firstPosY, secondPosY), std::max(firstPosX, secondPosX), std::max(firstPosY, secondPosY));
         field->printField();
     }
+
     bool doTurn(Field* opponentField) override 
     {
         int posX;
@@ -99,22 +102,46 @@ class PlayerLocal : public Player {
     }
 };
 
+// ai player is not controller by input, works/thinks for itself
 class PlayerAI : public Player {
     public:
     PlayerAI() : Player() {
         field = new Field();
     };
-    void enterShips() override {
-        // TODO
-        std::cout << "ai player placed ships" << std::endl;
-    }
-    bool doTurn(Field* opponentField) override {
-        // TODO
-        std::cout << "ai player done turn" << std::endl;
-        return false;
-    }
+
     void enterShip(int shipLength) override {
         // TODO
+    }
+
+    // ai player shoots at random location
+    bool doTurn(Field* opponentField) override 
+    {
+        int posX;
+        int posY;
+        bool isCorrectPos;
+
+        do {
+            posX = GetRandomNumberBetween(0, 9);
+            posY = GetRandomNumberBetween(0, 9);
+
+            // if field has been shot at previously (miss or hit), repeat random
+            if (opponentField->charAt(posX, posY) == 'X' || opponentField->charAt(posX, posY) == 'M') {
+                isCorrectPos = false;
+            }
+            else isCorrectPos = true;
+        }
+        while (!isCorrectPos);
+
+        opponentField->shootAt(posX, posY);
+    }
+
+    void enterShips() override 
+    {
+        int shipLengths[5] = {5,4,3,3,2};
+        for (int shipLength : shipLengths) {
+            enterShip(shipLength);
+        }
+        std::cout << "Placed all ships" << std::endl;
     }
 };
 

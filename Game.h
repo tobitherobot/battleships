@@ -10,8 +10,6 @@ class Game {
     void chooseMode();
     void save();
     void load();
-    void encrypt();
-    void decrypt();
 
     private:
     Player* player1;

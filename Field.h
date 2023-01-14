@@ -11,6 +11,7 @@ class Field {
     Field* placeShip(int, int, int, int);
     void printField();
     void printFog();
+    char charAt(int, int);
 };
 
 #endif
