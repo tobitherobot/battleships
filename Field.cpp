@@ -27,6 +27,7 @@ bool Field::shootAt(int posX, int posY)
 {
     if (charField[posX][posY] == 'O') {
         charField[posX][posY] = 'X';
+        countShipsHit += 1;
         return true;
     }
     else charField[posX][posY] = 'M';

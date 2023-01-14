@@ -45,17 +45,17 @@ class PlayerLocal : public Player {
             int secondPosY = atoi(input.substr(input.find('-')+2).c_str()) - 1;
 
             if (firstPosX < 0 || firstPosX > 9 || firstPosY < 0 || firstPosY > 9 || secondPosX < 0 || secondPosX > 9 || secondPosY < 0 || secondPosY > 9) {
-                std::cout << "Your input " << input << " is incorrect! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input " << input << " is incorrect! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
             else if (firstPosX != secondPosX && firstPosY != secondPosY) {
-                std::cout << "Your coordinates " << input << " are not in one row/column! Please try again!" << std::endl;
+                std::cout << "ERROR: Your coordinates " << input << " are not in one row/column! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
             else if (abs(firstPosX - secondPosX) + abs(firstPosY - secondPosY) + 1 != shipLength) {
-                std::cout << "Your input " << input << " is not length " << shipLength << "! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input " << input << " is not length " << shipLength << "! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
@@ -68,7 +68,7 @@ class PlayerLocal : public Player {
             for (int i = minX; i <= maxX; i++) {
                 for (int j = minY; j <= maxY; j++) {
                     if (field->isShipAround(i, j)) {
-                        std::cout << "Your coordinates overlap with / touch previous set ships! Please try again!" << std::endl;
+                        std::cout << "ERROR: Your coordinates overlap with / touch previous set ships! Please try again!" << std::endl;
                         inputCorrect = false;
                         break;
                     }
@@ -97,12 +97,12 @@ class PlayerLocal : public Player {
             posY = atoi(input.substr(1, input.find('-')).c_str()) - 1;
 
             if (posX < 0 || posX > 9 || posY < 0 || posY > 9) {
-                std::cout << "Your input " << input << " is incorrect! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input " << input << " is incorrect! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
             else if (opponentField->charAt(posX, posY) == 'X' || opponentField->charAt(posX, posY) == 'M') {
-                std::cout << "Your input " << input << " has already been shot! Please try again!" << std::endl;
+                std::cout << "ERROR: Your input " << input << " has already been shot! Please try again!" << std::endl;
                 inputCorrect = false;
                 continue;
             }
@@ -120,7 +120,8 @@ class PlayerLocal : public Player {
         for (int shipLength : shipLengths) {
             enterShip(shipLength);
         }
-        std::cout << "Placed all ships" << std::endl;
+        std::cout << "Press enter to end turn: ";
+        std::cin.ignore();
     }
 };
 
@@ -131,8 +132,64 @@ class PlayerAI : public Player {
         field = new Field();
     };
 
-    void enterShip(int shipLength) override {
-        // TODO
+    void enterShip(int shipLength) override 
+    {
+        int minX;
+        int minY;
+        int maxX;
+        int maxY;
+        bool inputCorrect = false;
+
+        while (!inputCorrect) 
+        {
+            inputCorrect = true;
+            
+            int firstPosX = GetRandomNumberBetween(0, 9);
+            int firstPosY = GetRandomNumberBetween(0, 9);
+            int secondPosX;
+            int secondPosY;
+
+            // 0=up, 1=right, 2=down, 3=left
+            int direction = GetRandomNumberBetween(0, 3);
+
+            if (direction == 0) {
+                secondPosX = firstPosX - shipLength + 1;
+                secondPosY = firstPosY;
+            }
+            else if (direction == 1) {
+                secondPosX = firstPosX;
+                secondPosY = firstPosY + shipLength - 1;
+            }
+            else if (direction == 2) {
+                secondPosX = firstPosX + shipLength - 1;
+                secondPosY = firstPosY;
+            }
+            else {
+                secondPosX = firstPosX;
+                secondPosY = firstPosY - shipLength + 1;
+            }
+
+            if (firstPosX < 0 || firstPosX > 9 || firstPosY < 0 || firstPosY > 9 || secondPosX < 0 || secondPosX > 9 || secondPosY < 0 || secondPosY > 9) {
+                inputCorrect = false;
+                continue;
+            }
+            
+            minX = std::min(firstPosX, secondPosX);
+            minY = std::min(firstPosY, secondPosY);
+            maxX = std::max(firstPosX, secondPosX);
+            maxY = std::max(firstPosY, secondPosY);
+
+            for (int i = minX; i <= maxX; i++) {
+                for (int j = minY; j <= maxY; j++) {
+                    if (field->isShipAround(i, j)) {
+                        inputCorrect = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        field->placeShip(minX, minY, maxX, maxY);
     }
 
     // ai player shoots at random location
@@ -155,6 +212,7 @@ class PlayerAI : public Player {
         while (!isCorrectPos);
 
         bool hasHit = opponentField->shootAt(posX, posY);
+        //field->printField();
         return hasHit;
     }
 
@@ -164,7 +222,8 @@ class PlayerAI : public Player {
         for (int shipLength : shipLengths) {
             enterShip(shipLength);
         }
-        std::cout << "Placed all ships" << std::endl;
+        std::cout << "AI Player placed all his ships!" << std::endl;
+        //field->printField();
     }
 };
 

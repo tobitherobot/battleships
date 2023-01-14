@@ -31,12 +31,23 @@ void Game::start() {
 
     // main game loop
     do {
+        // clear console
+        std::system("cls");
+
+        if (currentPlayer == player1) std::cout << "Player 1, it's your turn!" << std::endl;
+        else std::cout << "Player 2, it's your turn!" << std::endl;
+
         bool didTurnHit;
         
         // player makes his turn, can shoot again if he hit a ship
-        do {
+        do 
+        {
             didTurnHit = currentPlayer->doTurn(currentOpponent->field);
-        } while (didTurnHit);
+
+            if (currentPlayer == player1) std::cout << "Player 1 shot and " << (didTurnHit ? " hit a ship, it's Player 1's turn again!" : "missed!") << std::endl;
+            else std::cout << "Player 2 shot and " << (didTurnHit ? " hit a ship, it's Player 2's turn again!" : "missed!") << std::endl;
+        } 
+        while (didTurnHit);
         
         // switching roles of current player and current opponent 
         if (currentPlayer == player1) {
@@ -47,6 +58,11 @@ void Game::start() {
             currentPlayer = player1;
             currentOpponent = player2;
         }
+
+        currentOpponent->field->printFog();
+
+        std::cout << "Press enter to end turn: ";
+        std::cin.ignore();
 
         // is game over check
         isGameOver = player1->field->countShipsHit == 17 || player2->field->countShipsHit == 17;
