@@ -28,19 +28,19 @@ bool Field::shootAt(int posX, int posY)
     if (charField[posX][posY] == 'O') {
         charField[posX][posY] = 'X';
         countShipsHit += 1;
-        if (isShipSunk(posX, posY)) std::cout << "! SHIP SUNK !" << std::endl;
         return true;
     }
     else charField[posX][posY] = 'M';
     return false;
 }
 
-// checks if, after a hit, the given coords correspond to a completely hit/sunken ship
+// checks if, after a hit, the given coords correspond to a completely hit/sunk ship
 bool Field::isShipSunk(int posX, int posY) {
 
     return (isShipSunkRecursive(posX-1, posY, 0) && isShipSunkRecursive(posX, posY+1, 1) && isShipSunkRecursive(posX+1, posY, 2) && isShipSunkRecursive(posX, posY-1, 3));
 }
 
+// recursive function for checking if a ship is completely hit/sunk
 bool Field::isShipSunkRecursive(int posX, int posY, int direction) {
 
     if (posX < 0 || posX > 9 || posY < 0 || posY > 9) return true;

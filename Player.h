@@ -94,7 +94,7 @@ class PlayerLocal : public Player {
             std::cout << "Enter your coordinates for the field you want to shoot:" << std::endl;
             std::cin >> input;
             std::cin.ignore();
-            
+
             inputCorrect = true;
             
             posX = int(toupper(input.at(0)) - 65);
@@ -114,6 +114,7 @@ class PlayerLocal : public Player {
 
         bool hasHit = opponentField->shootAt(posX, posY);
         opponentField->printFog();
+        if (opponentField->isShipSunk(posX, posY)) std::cout << "! SHIP SUNK !" << std::endl;
 
         return hasHit;
     }

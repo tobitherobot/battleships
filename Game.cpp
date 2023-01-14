@@ -14,12 +14,16 @@ void Game::start() {
 
     // both players place their ships
     player1->enterShips();
-    std::cout << "Press enter do end turn:";
-    std::cin.ignore();
+    if (typeid(player1) == typeid(PlayerLocal)) {
+        std::cout << "Press enter do end turn:";
+        std::cin.ignore();
+    }
 
     player2->enterShips();
-    std::cout << "Press enter do end turn:";
-    std::cin.ignore();
+    if (typeid(player2) == typeid(PlayerLocal)) {
+        std::cout << "Press enter do end turn:";
+        std::cin.ignore();
+    }
 
     // random player, who begins the game, is chosen
     int playerBegins = GetRandomNumberBetween(1, 2);
@@ -62,8 +66,10 @@ void Game::start() {
         } 
         while (didTurnHit);
 
-        std::cout << "Press enter do end turn:";
-        std::cin.ignore();
+        if (typeid(currentPlayer) == typeid(PlayerLocal)) {
+            std::cout << "Press enter do end turn:";
+            std::cin.ignore();
+        }
 
         // switching roles of current player and current opponent 
         if (currentPlayer == player1) {
